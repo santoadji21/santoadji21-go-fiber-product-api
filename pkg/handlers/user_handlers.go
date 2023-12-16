@@ -75,14 +75,18 @@ func GetUser(c *fiber.Ctx) error {
 
     result := db.GetDB().First(&user, userID)
     if result.Error != nil {
-        return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-            "status":  "error",
-            "message": "User not found",
-            "error":   result.Error.Error(),
+        return c.Status(fiber.StatusNotFound).JSON(utils.ApiResponse{
+            Success: false,
+            Message: "User not found",
+            Data:    result.Error.Error(),
         })
     }
 
-    return c.JSON(user)
+    return c.JSON(utils.ApiResponse{
+        Success: true,
+        Message: "User retrieved successfully",
+        Data:    user,
+    })
 }
 
 
@@ -91,31 +95,35 @@ func UpdateUser(c *fiber.Ctx) error {
     var user models.User
 
     if err := db.GetDB().First(&user, userID).Error; err != nil {
-        return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-            "status":  "error",
-            "message": "User not found",
-            "error":   err.Error(),
+        return c.Status(fiber.StatusNotFound).JSON(utils.ApiResponse{
+            Success: false,
+            Message: "User not found",
+            Data:    err.Error(),
         })
     }
 
     type UpdateUserInput struct {
-        FirstName string
-        LastName  string
-        Email     string
+        FirstName string `json:"firstName"`
+        LastName  string `json:"lastName"`
+        Email     string `json:"email" validate:"email"`
     }
     var input UpdateUserInput
 
+   
     if err := c.BodyParser(&input); err != nil {
-        return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-            "status":  "error",
-            "message": "Failed to parse body",
-            "error":   err.Error(),
+        return c.Status(fiber.StatusBadRequest).JSON(utils.ApiResponse{
+            Success: false,
+            Message: "Invalid payload",
+            Data:    err.Error(),
         })
     }
 
     db.GetDB().Model(&user).Updates(models.User{FirstName: input.FirstName, LastName: input.LastName, Email: input.Email})
-
-    return c.JSON(user)
+    return c.JSON(utils.ApiResponse{
+        Success: true,
+        Message: "User updated successfully",
+        Data:    user,
+    })
 }
 
 
@@ -124,13 +132,17 @@ func DeleteUser(c *fiber.Ctx) error {
 
     result := db.GetDB().Delete(&models.User{}, userID)
     if result.Error != nil {
-        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-            "status":  "error",
-            "message": "Failed to delete user",
-            "error":   result.Error.Error(),
+        return c.Status(fiber.StatusInternalServerError).JSON(utils.ApiResponse{
+            Success: false,
+            Message: "Failed to delete user",
+            Data:    result.Error.Error(),
         })
     }
 
-    return c.SendStatus(fiber.StatusNoContent)
+    return c.JSON(utils.ApiResponse{
+        Success: true,
+        Message: "User deleted successfully",
+        Data:    nil,
+    })
 }
 
