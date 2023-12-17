@@ -38,7 +38,7 @@ func CreateUser(c *fiber.Ctx) error {
 
 	// Check for duplicate email error
 	if result.Error != nil {
-		if strings.Contains(result.Error.Error(), "users_email_key") {
+		if strings.Contains(result.Error.Error(), "23505") {
 			return c.Status(fiber.StatusConflict).JSON(utils.ApiResponse{
 				Success: false,
 				Message: "Email already in use",

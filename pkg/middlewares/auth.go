@@ -1,4 +1,4 @@
-package middleware
+package middlewares
 
 import (
 	jwtware "github.com/gofiber/contrib/jwt"
@@ -8,15 +8,15 @@ import (
 )
 
 func Protected() fiber.Handler {
-    jwtCfg := config.JwtCfg()	
-    return jwtware.New(jwtware.Config{
-        SigningKey: jwtware.SigningKey{Key: []byte(jwtCfg.SecretKey)},
-        ErrorHandler: jwtError,
-    })
+	jwtCfg := config.JwtCfg()
+	return jwtware.New(jwtware.Config{
+		SigningKey:   jwtware.SigningKey{Key: []byte(jwtCfg.SecretKey)},
+		ErrorHandler: jwtError,
+	})
 }
 
 func jwtError(c *fiber.Ctx, err error) error {
-    return c.Status(fiber.StatusUnauthorized).JSON(utils.ApiResponse{
+	return c.Status(fiber.StatusUnauthorized).JSON(utils.ApiResponse{
 		Success: false,
 		Message: "Unauthorized",
 		Data:    nil,
