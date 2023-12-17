@@ -17,8 +17,12 @@ type Config struct {
     DBPort     string
 }
 
+type JwtConfig struct {
+    SecretKey string
+}
+
 // LoadConfig reads configuration from .env file and environment variables.
-func LoadConfig() Config {
+func DbCfg() Config {
     err := godotenv.Load()
     if err != nil {
         log.Fatal("Error loading .env file")
@@ -30,5 +34,16 @@ func LoadConfig() Config {
         DBHost:     os.Getenv("DB_HOST"),
         DBName:     os.Getenv("DB_NAME"),
         DBPort:     os.Getenv("DB_PORT"),
+    }
+}
+
+func JwtCfg() JwtConfig {
+    err := godotenv.Load()
+    if err != nil {
+        log.Fatal("Error loading .env file")
+    }
+
+    return JwtConfig{
+        SecretKey: os.Getenv("JWT_SECRET_KEY"),
     }
 }

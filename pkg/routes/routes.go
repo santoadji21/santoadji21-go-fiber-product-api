@@ -14,6 +14,9 @@ func AppRoutes(app *fiber.App) {
     app.Patch("/api/users/:id", handlers.UpdateUser)
     app.Delete("/api/users/:id", handlers.DeleteUser)
 
+    // Auth routes
+    app.Post("/api/login", handlers.Login)
+
     // Product routes
     app.Post("/api/products", handlers.CreateProduct)
     app.Get("/api/products/:id", handlers.GetProduct)
