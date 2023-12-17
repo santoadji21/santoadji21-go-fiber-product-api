@@ -8,6 +8,15 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// CreateUser creates a new user
+// @Summary Create a new user
+// @Description Create a new user with the given details
+// @Tags User
+// @Accept  json
+// @Produce  json
+// @Param   user body     models.User   true  "User Info"
+// @Success 201 {object}  models.User
+// @Router /api/users [post]
 func CreateUser(c *fiber.Ctx) error {
 	user := new(models.User)
 
@@ -62,6 +71,14 @@ func CreateUser(c *fiber.Ctx) error {
 	})
 }
 
+// GetAllUsers retrieves all users
+// @Summary Get all users
+// @Description Retrieves a list of all users
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.User
+// @Router /api/users [get]
 func GetAllUsers(c *fiber.Ctx) error {
 	var users []models.User
 
@@ -86,6 +103,16 @@ func GetAllUsers(c *fiber.Ctx) error {
 	})
 }
 
+// GetUser retrieves a single user by ID
+// @Summary Get a user
+// @Description Retrieves a user by their ID
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Success 200 {object} models.User
+// @Failure 404 {object} utils.ApiResponse
+// @Router /api/users/{id} [get]
 func GetUser(c *fiber.Ctx) error {
 	userID := c.Params("id")
 	var user models.User
@@ -107,6 +134,17 @@ func GetUser(c *fiber.Ctx) error {
 	})
 }
 
+// UpdateUser updates a user's details
+// @Summary Update user
+// @Description Updates a user's details by their ID
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Param   user body    models.User   true  "User Info"
+// @Success 200 {object} models.User
+// @Failure 404 {object} utils.ApiResponse
+// @Router /api/users/{id} [patch]
 func UpdateUser(c *fiber.Ctx) error {
 	userID := c.Params("id")
 	var user models.User
@@ -143,6 +181,16 @@ func UpdateUser(c *fiber.Ctx) error {
 	})
 }
 
+// DeleteUser deletes a user
+// @Summary Delete user
+// @Description Deletes a user by their ID
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Success 200 {object} utils.ApiResponse
+// @Failure 404 {object} utils.ApiResponse
+// @Router /api/users/{id} [delete]
 func DeleteUser(c *fiber.Ctx) error {
 	userID := c.Params("id")
 	var user models.User

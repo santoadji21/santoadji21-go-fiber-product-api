@@ -11,6 +11,19 @@ import (
 	"github.com/santoadji21/santoadji21-go-fiber-product-api/pkg/utils"
 )
 
+// Login authenticates a user and provides a JWT token
+// @Summary User login
+// @Description Authenticates a user and returns a JWT token
+// @Tags Auth
+// @Accept  json
+// @Produce  json
+// @Param   email    body    string  true  "Email address of the user"
+// @Param   password body    string  true  "Password of the user"
+// @Success 200 {object} map[string]interface{} "Login successful with token"
+// @Failure 400 {object} utils.ApiResponse "Invalid input"
+// @Failure 401 {object} utils.ApiResponse "Unauthorized"
+// @Failure 500 {object} utils.ApiResponse "Internal server error"
+// @Router /api/login [post]
 func Login(c *fiber.Ctx) error {
 	type LoginRequest struct {
 		Email    string `json:"email"`

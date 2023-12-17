@@ -1,0 +1,467 @@
+basePath: /
+definitions:
+  models.Category:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.Product:
+    properties:
+      category_id:
+        type: integer
+      created_at:
+        type: string
+      description:
+        type: string
+      discount:
+        type: number
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+      qty:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  models.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+      password:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  utils.ApiResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: fiber@swagger.io
+    name: API Support
+  description: This is a sample server for Fiber Product API.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Fiber Product API
+  version: "1.0"
+paths:
+  /api/categories:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Category'
+            type: array
+      summary: Get all categories
+      tags:
+      - Category
+  /api/category:
+    post:
+      consumes:
+      - application/json
+      description: Create a new category with the given name
+      parameters:
+      - description: Category Info
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.Category'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Category'
+      summary: Create a new category
+      tags:
+      - Category
+  /api/category/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a category by its ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ApiResponse'
+        "404":
+          description: Category not found
+          schema:
+            $ref: '#/definitions/utils.ApiResponse'
+      summary: Delete a category
+      tags:
+      - Category
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a category by its ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Category'
+        "404":
+          description: Category not found
+          schema:
+            $ref: '#/definitions/utils.ApiResponse'
+      summary: Get a category
+      tags:
+      - Category
+    patch:
+      consumes:
+      - application/json
+      description: Updates a category's details by its ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Category update data
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.Category'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Category'
+        "404":
+          description: Category not found
+          schema:
+            $ref: '#/definitions/utils.ApiResponse'
+      summary: Update a category
+      tags:
+      - Category
+  /api/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user and returns a JWT token
+      parameters:
+      - description: Email address of the user
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: Password of the user
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful with token
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/utils.ApiResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ApiResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/utils.ApiResponse'
+      summary: User login
+      tags:
+      - Auth
+  /api/product:
+    post:
+      consumes:
+      - application/json
+      description: Create a new product with the given details
+      parameters:
+      - description: Product Info
+        in: body
+        name: products
+        required: true
+        schema:
+          $ref: '#/definitions/models.Product'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Product'
+      summary: Create a new product
+      tags:
+      - Product
+  /api/product/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a product by its ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ApiResponse'
+        "404":
+          description: Product not found
+          schema:
+            $ref: '#/definitions/utils.ApiResponse'
+      summary: Delete a product
+      tags:
+      - Product
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a product by its ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Product'
+        "404":
+          description: Product not found
+          schema:
+            $ref: '#/definitions/utils.ApiResponse'
+      summary: Get a product
+      tags:
+      - Product
+    patch:
+      consumes:
+      - application/json
+      description: Updates a product's details by its ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Product update data
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/models.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Product'
+        "404":
+          description: Product not found
+          schema:
+            $ref: '#/definitions/utils.ApiResponse'
+      summary: Update a product
+      tags:
+      - Product
+  /api/products:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+      summary: Get all products
+      tags:
+      - Product
+  /api/users:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+      summary: Get all users
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with the given details
+      parameters:
+      - description: User Info
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Create a new user
+      tags:
+      - User
+  /api/users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a user by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ApiResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.ApiResponse'
+      summary: Delete user
+      tags:
+      - User
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a user by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.ApiResponse'
+      summary: Get a user
+      tags:
+      - User
+    patch:
+      consumes:
+      - application/json
+      description: Updates a user's details by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User Info
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.ApiResponse'
+      summary: Update user
+      tags:
+      - User
+swagger: "2.0"
