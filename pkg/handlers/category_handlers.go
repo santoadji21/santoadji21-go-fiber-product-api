@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"strconv"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/santoadji21/santoadji21-go-fiber-product-api/internal/db"
 	"github.com/santoadji21/santoadji21-go-fiber-product-api/pkg/models"
@@ -117,9 +119,16 @@ func UpdateCategory(c *fiber.Ctx) error {
 
 // DeleteCategory - Handler for deleting a category
 func DeleteCategory(c *fiber.Ctx) error {
-	id := c.Params("id")
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(utils.ApiResponse{
+			Success: false,
+			Message: "Invalid ID format",
+			Data:    nil,
+		})
+	}
+
 	var category models.Category
-	result := db.GetDB().Delete(&models.Category{}, id)
 	if err := db.GetDB().First(&category, id).Error; err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(utils.ApiResponse{
 			Success: false,
@@ -128,6 +137,7 @@ func DeleteCategory(c *fiber.Ctx) error {
 		})
 	}
 
+	result := db.GetDB().Unscoped().Delete(&models.Category{}, id)
 	if result.Error != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(utils.ApiResponse{
 			Success: false,
