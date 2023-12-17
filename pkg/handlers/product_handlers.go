@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"strings"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/santoadji21/santoadji21-go-fiber-product-api/internal/db"
 	"github.com/santoadji21/santoadji21-go-fiber-product-api/pkg/models"
@@ -20,18 +18,21 @@ func CreateProduct(c *fiber.Ctx) error {
 		})
 	}
 
-	result := db.GetDB().Create(&product)
-	if result.Error != nil {
-		// Check for duplicate name error using string matching
-		if strings.Contains(result.Error.Error(), "23505") && strings.Contains(result.Error.Error(), "SQLSTATE") {
-			return c.Status(fiber.StatusConflict).JSON(utils.ApiResponse{
-				Success: false,
-				Message: "Product name already exists",
-				Data:    nil,
-			})
-		}
+	// Check if a product with the same name already exists
+	var existingProduct models.Product
+	result := db.GetDB().Where("name = ?", product.Name).First(&existingProduct)
+	if result.Error == nil {
+		// A product with the same name was found
+		return c.Status(fiber.StatusConflict).JSON(utils.ApiResponse{
+			Success: false,
+			Message: "Product name already exists",
+			Data:    nil,
+		})
+	}
 
-		// Handle other potential errors
+	// No existing product found, proceed to create a new one
+	result = db.GetDB().Create(&product)
+	if result.Error != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(utils.ApiResponse{
 			Success: false,
 			Message: "Failed to create product",

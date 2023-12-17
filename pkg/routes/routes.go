@@ -26,9 +26,10 @@ func AppRoutes(app *fiber.App) {
 	app.Delete("/api/product/:id", middlewares.Protected(), handlers.DeleteProduct)
 
 	// Category routes
-	app.Post("/api/categories", handlers.CreateCategory)
-	app.Get("/api/categories/:id", handlers.GetCategory)
-	app.Patch("/api/categories/:id", handlers.UpdateCategory)
-	app.Delete("/api/categories/:id", handlers.DeleteCategory)
+	app.Post("/api/category", middlewares.Protected(), handlers.CreateCategory)
+	app.Get("/api/categories", handlers.GetAllCategories)
+	app.Get("/api/category/:id", handlers.GetCategory)
+	app.Patch("/api/category/:id", middlewares.Protected(), handlers.UpdateCategory)
+	app.Delete("/api/category/:id", middlewares.Protected(), handlers.DeleteCategory)
 
 }

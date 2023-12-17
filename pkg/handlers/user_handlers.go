@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"strings"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/santoadji21/santoadji21-go-fiber-product-api/internal/db"
 	"github.com/santoadji21/santoadji21-go-fiber-product-api/pkg/models"
@@ -21,6 +19,18 @@ func CreateUser(c *fiber.Ctx) error {
 		})
 	}
 
+	// Check if a user with the same email already exists
+	var existingUser models.User
+	result := db.GetDB().Where("email = ?", user.Email).First(&existingUser)
+	if result.Error == nil {
+		// A user with the same email was found
+		return c.Status(fiber.StatusConflict).JSON(utils.ApiResponse{
+			Success: false,
+			Message: "Email already in use",
+			Data:    nil,
+		})
+	}
+
 	// Hash the password
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
@@ -30,22 +40,11 @@ func CreateUser(c *fiber.Ctx) error {
 			Data:    err.Error(),
 		})
 	}
-	// Replace the plain password with the hashed password
 	user.Password = string(hash)
 
 	// Create the user
-	result := db.GetDB().Create(user)
-
-	// Check for duplicate email error
+	result = db.GetDB().Create(user)
 	if result.Error != nil {
-		if strings.Contains(result.Error.Error(), "23505") {
-			return c.Status(fiber.StatusConflict).JSON(utils.ApiResponse{
-				Success: false,
-				Message: "Email already in use",
-				Data:    nil,
-			})
-		}
-
 		// Handle other potential errors
 		return c.Status(fiber.StatusInternalServerError).JSON(utils.ApiResponse{
 			Success: false,
