@@ -13,9 +13,9 @@ import (
 	_ "github.com/santoadji21/santoadji21-go-fiber-product-api/pkg/handlers"
 )
 
-// @title Fiber Product API
+// @title Go Fiber Product API
 // @version 1.0
-// @description This is a sample server for Fiber Product API.
+// @description This is a sample server for Go Fiber Product API.
 // @termsOfService http://swagger.io/terms/
 // @contact.name API Support
 // @contact.email fiber@swagger.io
