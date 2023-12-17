@@ -2,8 +2,8 @@ package db
 
 import (
 	"fmt"
-	"go-product-api/config"     // replace with your actual module path
-	"go-product-api/pkg/models" // replace with your actual module path
+	"github.com/santoadji21/santoadji21-go-fiber-product-api/config"     // replace with your actual module path
+	"github.com/santoadji21/santoadji21-go-fiber-product-api/pkg/models" // replace with your actual module path
 	"log"
 
 	"gorm.io/driver/postgres"

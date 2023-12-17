@@ -1,4 +1,4 @@
-module go-product-api
+module github.com/santoadji21/santoadji21-go-fiber-product-api
 
 go 1.21.4
 

@@ -1,10 +1,11 @@
 package main
 
 import (
-	"go-product-api/config"
-	"go-product-api/internal/db"
-	"go-product-api/pkg/routes"
 	"log"
+
+	"github.com/santoadji21/santoadji21-go-fiber-product-api/config"
+	"github.com/santoadji21/santoadji21-go-fiber-product-api/internal/db"
+	"github.com/santoadji21/santoadji21-go-fiber-product-api/pkg/routes"
 
 	"github.com/gofiber/fiber/v2"
 )

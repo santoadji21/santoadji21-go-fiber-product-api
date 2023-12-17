@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"go-product-api/internal/db"
-	"go-product-api/pkg/models"
-	"go-product-api/pkg/utils"
 	"strings"
+
+	"github.com/santoadji21/santoadji21-go-fiber-product-api/internal/db"
+	"github.com/santoadji21/santoadji21-go-fiber-product-api/pkg/models"
+	"github.com/santoadji21/santoadji21-go-fiber-product-api/pkg/utils"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -98,7 +99,7 @@ func UpdateUser(c *fiber.Ctx) error {
         return c.Status(fiber.StatusNotFound).JSON(utils.ApiResponse{
             Success: false,
             Message: "User not found",
-            Data:    err.Error(),
+            Data:    nil,
         })
     }
 
@@ -129,8 +130,17 @@ func UpdateUser(c *fiber.Ctx) error {
 
 func DeleteUser(c *fiber.Ctx) error {
     userID := c.Params("id")
-
+    var user models.User
     result := db.GetDB().Delete(&models.User{}, userID)
+
+      if err := db.GetDB().First(&user, userID).Error; err != nil {
+        return c.Status(fiber.StatusNotFound).JSON(utils.ApiResponse{
+            Success: false,
+            Message: "User not found",
+            Data:    nil,
+        })
+    }
+
     if result.Error != nil {
         return c.Status(fiber.StatusInternalServerError).JSON(utils.ApiResponse{
             Success: false,

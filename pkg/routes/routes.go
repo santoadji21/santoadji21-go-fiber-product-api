@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"go-product-api/pkg/handlers"
+	"github.com/santoadji21/santoadji21-go-fiber-product-api/pkg/handlers"
 
 	"github.com/gofiber/fiber/v2"
 )
